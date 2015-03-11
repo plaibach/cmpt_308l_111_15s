@@ -41,15 +41,15 @@ WHERE city != 'Dallas'
 SELECT *
 FROM orders
 WHERE mon = 'jan'
-   OR mon = 'may'
+   OR mon = 'may';
 
 --8
 SELECT *
 FROM orders
 WHERE mon = 'feb'
-  AND dollars > 500
+  AND dollars > 500;
 
 --9
 SELECT ordno
 FROM orders
-WHERE cid = 'c005'
+WHERE cid = 'c005';
