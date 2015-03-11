@@ -53,3 +53,12 @@ WHERE mon = 'feb'
 SELECT ordno
 FROM orders
 WHERE cid = 'c005';
+
+--9 Alternate
+SELECT ordno
+FROM orders
+WHERE cid IN 
+   (SELECT cid
+    FROM customers
+    WHERE name = 'Weyland-Yutani');
+
