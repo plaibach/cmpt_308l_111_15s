@@ -17,14 +17,14 @@
 
 -- 2. Show the pids of products ordered through any agent who makes at least one order for a customer in Kyoto, sorted by pid from highest to lowest. Use joins; no subqueries. 
 
--- WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF AGENTS = 1, 3, 6
--- WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF PRODUCTS = 1, 3, 4, 5, 7
-
-   SELECT orders.aid
-   FROM orders
+   SELECT DISTINCT a.pid
+   FROM orders a
+      RIGHT JOIN orders b
+         ON a.aid = b.aid
       INNER JOIN customers
-         ON orders.cid = customers.cid
-   WHERE customers.city = 'Kyoto';
+         ON b.cid = customers.cid
+   WHERE customers.city = 'Kyoto'
+   ORDER BY a.pid ASC;
 
 -- 3. Show the names of customers who have never placed an order. Use a subquery. 
 
