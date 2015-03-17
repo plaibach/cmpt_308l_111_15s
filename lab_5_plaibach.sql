@@ -19,7 +19,7 @@
 
    SELECT DISTINCT a.pid
    FROM orders a
-      RIGHT JOIN orders b
+      INNER JOIN orders b
          ON a.aid = b.aid
       INNER JOIN customers
          ON b.cid = customers.cid
