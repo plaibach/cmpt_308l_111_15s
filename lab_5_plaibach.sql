@@ -17,14 +17,15 @@
 
 -- 2. Show the pids of products ordered through any agent who makes at least one order for a customer in Kyoto, sorted by pid from highest to lowest. Use joins; no subqueries. 
 
-   SELECT DISTINCT a.pid
-   FROM orders a
-      INNER JOIN orders b
-         ON a.aid = b.aid
+   -- The [AS] statements are included only for clarity and a reminder to myself
+   SELECT DISTINCT allOrders.pid
+   FROM orders AS allOrders
+      INNER JOIN orders AS ordersKyotoAgents
+         ON allOrders.aid = ordersKyotoAgents.aid
       INNER JOIN customers
-         ON b.cid = customers.cid
+         ON ordersKyotoAgents.cid = customers.cid
    WHERE customers.city = 'Kyoto'
-   ORDER BY a.pid ASC;
+   ORDER BY allOrders.pid ASC;
 
 -- 3. Show the names of customers who have never placed an order. Use a subquery. 
 
@@ -64,10 +65,28 @@
 
 -- 7. Show the name and city of customers who live in the city that makes the fewest different kinds of products. (Hint: Use count and group by on the Products table.) 
 
--- WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
--- WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
+   SELECT customers.name, customers.city
+   FROM customers,
+      (SELECT city, COUNT(name) as cityProductCount
+       FROM products
+       GROUP BY city
+       ORDER BY cityProductCount ASC
+       LIMIT 1) cityProductCountMin
+   WHERE cityProductCountMin.city = customers.city
 
-   SELECT MIN(count), city
-   FROM (SELECT COUNT(*), city
-         FROM products
-         GROUP BY products.city) AS foo;
+-- 7*  Shouldn't the solution should also work if more than one city makes the same number of "fewest different kinds of products?" The following query is to test this by seeking to show "the name and city of customers who live in the city[ies] that makes the [most] different kinds of products [both Dallas and Newark].
+
+--     I can't seem to wrap my head around my self-complicated version :-( No, it doesn't work!
+
+   SELECT customers.name, customers.city
+   FROM customers,
+
+      SELECT DISTINCT products.city, cityProductCountMax.cityProductCount
+      FROM products,
+         (SELECT MAX 
+            (SELECT city,COUNT(name) as cityProductCount
+             FROM products
+             GROUP BY city) cityProductCountMax
+
+   WHERE cityProductCountMax.city = products.city
+   ORDER BY cityProductCount DESC
